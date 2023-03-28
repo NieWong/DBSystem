@@ -1,102 +1,126 @@
-Table users{
-  id int [pk]
-  fName varchar[20]
-  lName varchar[20]
-  pNumber varchar[20]
-  email varchar[20]
-  password varchar[20]
-  type varchar[20]
-}
+CREATE DATABASE ST;
+USE ST;
 
-Table orders{
-  id int [pk]
-  uId int
-  employeeId int
-  orderDate Date
-  requiredDate Date
-  shippedDate Date
-  address varchar[20]
-}
+Create Table users(
+  id int,
+  fName varchar(20),
+  lName varchar(20),
+  pNumber varchar(20),
+  email varchar(20),
+  password varchar(20),
+  type varchar(20)
+);
 
-Table orderDetails{
-  id int [pk]
-  userId varchar[20]
-  total decimal
-  paymentId int
+insert into users
+values('1', 'Sukhe', 'Altan', '88', 'ab.sukhee', '123', 'user');
+
+Create Table orders(
+  id int,
+  uId int,
+  employeeId int,
+  orderDate Date,
+  requiredDate Date,
+  shippedDate Date,
+  address varchar(20)
+);
+
+Create Table orderDetails(
+  id int,
+  userId varchar(20),
+  total decimal,
+  paymentId int,
   createdAt timestamp
-}
+);
 
-Table orderItems{
-  id int [pk]
-  orderId int
-  productId int
-  quantity int
-  discount bool
-  status varchar[20]
+Create Table orderItems(
+  id int,
+  orderId int,
+  productId int,
+  quantity int,
+  discount bool,
+  status varchar(20),
   createdAt timestamp
-}
+);
 
-Table products{
-  id int [pk]
-  name varchar[20]
-  description varchar[20]
-  supplierId int
-  price int
-  brandId int
-  stock int
-  categoryId varchar[20]
-  discount int
-  status varchar[20]
+Create Table products(
+  id int,
+  name varchar(20),
+  description varchar(20),
+  supplierId int,
+  price int,
+  brandId int,
+  stock int,
+  categoryId varchar(20),
+  discount int,	
+  status varchar(20),
   pictureId int
-}
+);
 
-Table cartItem{
-  id int [pk]
-  productId int
-  orderId int
-  quantity int
+Create Table cartItem(
+  id int,
+  productId int,
+  orderId int,
+  quantity int,
   createdAt timestamp
-}
-Table paymentDetail{
-  id int [pk]
-  orderId int
-  amount int 
-  status varchar[20]
+);
+Create Table paymentDetail(
+  id int,
+  orderId int,
+  amount int ,
+  status varchar(20),
   createdAt timestamp
-}
+);
 
-Table brands{
-  id int
-  name varchar[20]
-  region varchar[20]
-}
+Create Table brands(
+  id int,
+  name varchar(20),
+  region varchar(20)
+);
 
-Table supplier{
-  id int
-  name varchar[20]
-  pNumber int
-  email varchar[20]
-}
+Create Table supplier(
+  id int,
+  name varchar(20),
+  pNumber int,
+  email varchar(20)
+);
 
-Table pictures{
-  id int [pk]
-  productId int
-  pictureDetail varchar[20]
-}
+Create Table pictures(
+  id int,
+  productId int,
+  pictureDetail varchar(20)
+);
 
-Table category{
-  id int [pk]
-  parentId varchar[20]
-  categoryName varchar[20]
-}
+Create Table category(
+  id int,
+  parentId varchar(20),
+  categoryName varchar(20)
+);
 
-Ref: users.id - orders.uId
-Ref: products.id < cartItem.productId
-Ref: orders.id < cartItem.orderId
-Ref: users.id - orderDetails.userId
-Ref: orderDetails.paymentId - paymentDetail.id
-Ref: pictures.productId < products.id
-Ref: orderItems.productId > products.id
-Ref: brands.id < products.brandId
-Ref: category.id < products.categoryId
-Ref: supplier.id < products.supplierId
+DELIMITER &&
+	create procedure test_data()
+    begin
+    declare i int default 11;
+    declare name varchar(10);
+    declare phone_number int;
+    while i <= 25000000 do
+    set `name` = concat(
+		substr("ABCDEFGHIJKLMNOPQRSTUVWXYZ",rand()*28,1),
+		substr("ABCDEFGHIJKLMNOPQRSTUVWXYZ",rand()*28,1),
+		substr("ABCDEFGHIJKLMNOPQRSTUVWXYZ",rand()*28,1),
+		substr("ABCDEFGHIJKLMNOPQRSTUVWXYZ",rand()*28,1),
+		substr("ABCDEFGHIJKLMNOPQRSTUVWXYZ",rand()*28,1),
+		substr("ABCDEFGHIJKLMNOPQRSTUVWXYZ",rand()*28,1),
+		substr("ABCDEFGHIJKLMNOPQRSTUVWXYZ",rand()*28,1),
+		substr("ABCDEFGHIJKLMNOPQRSTUVWXYZ",rand()*28,1),
+		substr("ABCDEFGHIJKLMNOPQRSTUVWXYZ",rand()*28,1),
+		substr("ABCDEFGHIJKLMNOPQRSTUVWXYZ",rand()*28,1));
+    set phone_number = concat("99", substr(rand(),3,6));
+			insert into users (fName, lName, pNumber, email, `password`, `type`)
+			values(`name`, `name`, phone_number, concat("test",i,"@gmail.com"),MD5(RAND()),`name`);
+			set i = i+1;
+		end while;
+	end &&
+DELIMITER ;
+
+call test_data();
+select * from users
