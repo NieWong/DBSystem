@@ -1,0 +1,102 @@
+Table users{
+  id int [pk]
+  fName varchar[20]
+  lName varchar[20]
+  pNumber varchar[20]
+  email varchar[20]
+  password varchar[20]
+  type varchar[20]
+}
+
+Table orders{
+  id int [pk]
+  uId int
+  employeeId int
+  orderDate Date
+  requiredDate Date
+  shippedDate Date
+  address varchar[20]
+}
+
+Table orderDetails{
+  id int [pk]
+  userId varchar[20]
+  total decimal
+  paymentId int
+  createdAt timestamp
+}
+
+Table orderItems{
+  id int [pk]
+  orderId int
+  productId int
+  quantity int
+  discount bool
+  status varchar[20]
+  createdAt timestamp
+}
+
+Table products{
+  id int [pk]
+  name varchar[20]
+  description varchar[20]
+  supplierId int
+  price int
+  brandId int
+  stock int
+  categoryId varchar[20]
+  discount int
+  status varchar[20]
+  pictureId int
+}
+
+Table cartItem{
+  id int [pk]
+  productId int
+  orderId int
+  quantity int
+  createdAt timestamp
+}
+Table paymentDetail{
+  id int [pk]
+  orderId int
+  amount int 
+  status varchar[20]
+  createdAt timestamp
+}
+
+Table brands{
+  id int
+  name varchar[20]
+  region varchar[20]
+}
+
+Table supplier{
+  id int
+  name varchar[20]
+  pNumber int
+  email varchar[20]
+}
+
+Table pictures{
+  id int [pk]
+  productId int
+  pictureDetail varchar[20]
+}
+
+Table category{
+  id int [pk]
+  parentId varchar[20]
+  categoryName varchar[20]
+}
+
+Ref: users.id - orders.uId
+Ref: products.id < cartItem.productId
+Ref: orders.id < cartItem.orderId
+Ref: users.id - orderDetails.userId
+Ref: orderDetails.paymentId - paymentDetail.id
+Ref: pictures.productId < products.id
+Ref: orderItems.productId > products.id
+Ref: brands.id < products.brandId
+Ref: category.id < products.categoryId
+Ref: supplier.id < products.supplierId
