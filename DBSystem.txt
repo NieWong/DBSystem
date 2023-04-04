@@ -16,11 +16,6 @@ Table orders{
   requiredDate Date
   shippedDate Date
   address varchar[20]
-}
-
-Table orderDetails{
-  id int [pk]
-  userId varchar[20]
   total decimal
   paymentId int
   createdAt timestamp
@@ -47,16 +42,8 @@ Table products{
   categoryId varchar[20]
   discount int
   status varchar[20]
-  pictureId int
 }
 
-Table cartItem{
-  id int [pk]
-  productId int
-  orderId int
-  quantity int
-  createdAt timestamp
-}
 Table paymentDetail{
   id int [pk]
   orderId int
@@ -91,11 +78,9 @@ Table category{
 }
 
 Ref: users.id - orders.uId
-Ref: products.id < cartItem.productId
-Ref: orders.id < cartItem.orderId
-Ref: users.id - orderDetails.userId
-Ref: orderDetails.paymentId - paymentDetail.id
-Ref: pictures.productId < products.id
+Ref: orders.id < orderItems.orderId
+Ref: orders.paymentId - paymentDetail.id
+Ref: pictures.productId > products.id
 Ref: orderItems.productId > products.id
 Ref: brands.id < products.brandId
 Ref: category.id < products.categoryId
